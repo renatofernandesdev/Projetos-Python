@@ -2,7 +2,6 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-import random
 from collections import Counter
 
 KV = '''
@@ -32,7 +31,23 @@ MDScreen:
         pos_hint: {"center_x": 0.5, "center_y": 0.3}
         size_hint_x: .4
     MDLabel:
-        id: resultado
+        id: resultadopos
+        text: ""
+        pos_hint: {"center_y": 0.10}
+        theme_text_color: "Custom"
+        text_color: 0/255, 206/255, 5/255, 1
+        halign: "center"
+        font_style: "H4"
+        bold: True
+    MDLabel:
+        id: resultadoneg
+        text: ""
+        pos_hint: {"center_y": 0.10}
+        theme_text_color: "Error"
+        halign: "center"
+        font_style: "H4"
+    MDLabel:
+        id: resultadoinvalido
         text: ""
         pos_hint: {"center_y": 0.10}
         theme_text_color: "Custom"
@@ -61,7 +76,9 @@ class MainApp(MDApp):
     def validar(self):
         cpf = self.kvs.ids.text_cpf.text
         if (cpf.isdigit() is False) or len(cpf) != 11: # Confere se a pessoa digitou 11 números.
-            self.kvs.ids.resultado.text = ("Insira somente 11 números.")
+            self.kvs.ids.resultadopos.text = ("")
+            self.kvs.ids.resultadoneg.text = ("")
+            self.kvs.ids.resultadoinvalido.text = ("Insira somente 11 números.")
         else:
             cpflist = list(cpf)
             icpflist = []
@@ -101,12 +118,18 @@ class MainApp(MDApp):
 
             #FINALIZACAO
             if todos_iguais(icpflist) == True:
-                self.kvs.ids.resultado.text = ("CPF INVÁLIDO")
+                self.kvs.ids.resultadoinvalido.text = ("")
+                self.kvs.ids.resultadopos.text = ("")
+                self.kvs.ids.resultadoneg.text = ("CPF INVÁLIDO")
             else:
                 if (validacao == primeiravalidacao and validacao2 == segundavalidacao):
-                    self.kvs.ids.resultado.text = ("CPF VÁLIDO")
+                    self.kvs.ids.resultadoinvalido.text = ("")
+                    self.kvs.ids.resultadoneg.text = ("")
+                    self.kvs.ids.resultadopos.text = ("CPF VÁLIDO")              
                 else:
-                    self.kvs.ids.resultado.text = ("CPF INVÁLIDO")
+                    self.kvs.ids.resultadoinvalido.text = ("")
+                    self.kvs.ids.resultadopos.text = ("")
+                    self.kvs.ids.resultadoneg.text = ("CPF INVÁLIDO")
 
 ma = MainApp()
 ma.run()
